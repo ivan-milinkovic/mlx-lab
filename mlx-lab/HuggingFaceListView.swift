@@ -13,25 +13,7 @@ struct HuggingFaceListView: View {
                 }
             }
             
-            Table(vm.models) {
-                TableColumn("Name", value: \.id.name)
-                    .width(ideal: 300)
-                TableColumn("Namespace", value: \.id.namespace)
-                    .width(ideal: 100)
-                TableColumn("Library", value: \.libraryString)
-                    .width(ideal: 50)
-                TableColumn("Size", value: \.sizeString)
-                    .width(ideal: 70)
-                TableColumn("Actions") { model in
-                    Button("Load Size") {
-                        Task { await vm.loadSize(model.id) }
-                    }
-                    .buttonStyle(.bordered)
-                }
-                .width(ideal: 200)
-            }
-            .frame(maxHeight: .infinity)
-            .layoutPriority(1)
+            ModelListView(vm: vm)
             
             Button("Test \(vm.smallModel) (needs auth)") {
                 Task { await vm.inference() }
@@ -47,21 +29,76 @@ struct HuggingFaceListView: View {
     }
 }
 
-struct ModelView: View {
+#if os(macOS)
+struct ModelListView: View {
+    @Bindable var vm: HuggingFaceListViewModel
+    var body: some View {
+        Table(vm.models) {
+            TableColumn("Name", value: \.id.name)
+                .width(ideal: 300)
+            TableColumn("Namespace", value: \.id.namespace)
+                .width(ideal: 100)
+            TableColumn("Library", value: \.libraryString)
+                .width(ideal: 50)
+            TableColumn("Size", value: \.sizeString)
+                .width(ideal: 70)
+            TableColumn("Actions") { model in
+                Button("Load Size") {
+                    Task { await vm.loadSize(model.id) }
+                }
+                .buttonStyle(.bordered)
+            }
+            .width(ideal: 200)
+        }
+        .frame(maxHeight: .infinity)
+        .layoutPriority(1)
+    }
+}
+
+#else
+
+struct ModelListView: View {
+    @Bindable var vm: HuggingFaceListViewModel
+    var body: some View {
+        List(vm.models) { model in
+            ModelRowView(
+                model: model,
+                onLoadSize: { modelId in
+                    Task { await vm.loadSize(modelId) }
+                }
+            )
+        }
+        .frame(maxHeight: .infinity)
+        .layoutPriority(1)
+    }
+}
+
+struct ModelRowView: View {
     let model: Model
+    let onLoadSize: (Repo.ID) -> Void
     var body: some View {
         VStack(alignment: .leading) {
             Text(model.id.name)
             Group {
                 Text("namespace: \(model.id.namespace)")
                 Text("library: \(model.libraryString)")
-                Text("size: \(model.sizeString)")
+                if model.usedStorage == nil {
+                    Button("Load Size") {
+                        onLoadSize(model.id)
+                    }
+                    .buttonStyle(.bordered)
+                } else {
+                    Text("size: \(model.sizeString)")
+                }
             }
             .font(.subheadline)
             .padding(.horizontal)
         }
     }
 }
+
+#endif
+
 
 struct MesssageView: View {
     @Binding var message: String

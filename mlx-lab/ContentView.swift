@@ -15,6 +15,7 @@ struct ContentView: View {
                 Text(route.rawValue)
                     .tag(route)
             }
+            .navigationTitle("MLX Lab")
         }
         detail: {
             switch route {
