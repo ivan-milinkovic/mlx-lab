@@ -1,19 +1,9 @@
-//
-//  ContentView.swift
-//  mlx-lab
-//
-//  Created by Ivan Milinkovic on 18. 7. 2026..
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            HuggingFaceListView()
         }
         .padding()
     }
