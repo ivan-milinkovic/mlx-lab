@@ -21,7 +21,7 @@ struct HuggingFaceListView: View {
                 TableColumn("Library", value: \.libraryString)
                     .width(ideal: 50)
                 TableColumn("Size", value: \.sizeString)
-                    .width(ideal: 50)
+                    .width(ideal: 70)
                 TableColumn("Actions") { model in
                     Button("Load Size") {
                         Task { await vm.loadSize(model.id) }
@@ -33,7 +33,7 @@ struct HuggingFaceListView: View {
             .frame(maxHeight: .infinity)
             .layoutPriority(1)
             
-            Button("Test Inference \(vm.smallModel)") {
+            Button("Test \(vm.smallModel) (needs auth)") {
                 Task { await vm.inference() }
             }
             
