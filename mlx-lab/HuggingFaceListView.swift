@@ -8,9 +8,15 @@ struct HuggingFaceListView: View {
         VStack {
             HStack {
                 TextField("", text: $vm.searchQuery)
+                    .textFieldStyle(.roundedBorder)
                 Button("search") {
                     Task { await vm.search() }
                 }
+            }
+            
+            if let progress = vm.downloadProgress {
+                ProgressView("Downloading", value: progress)
+                    .progressViewStyle(.linear)
             }
             
             ModelListView(vm: vm)
@@ -30,6 +36,7 @@ struct HuggingFaceListView: View {
 }
 
 #if os(macOS)
+
 struct ModelListView: View {
     @Bindable var vm: HuggingFaceListViewModel
     var body: some View {
@@ -45,6 +52,10 @@ struct ModelListView: View {
             TableColumn("Actions") { model in
                 Button("Load Size") {
                     Task { await vm.loadSize(model.id) }
+                }
+                .buttonStyle(.bordered)
+                Button("Download") {
+                    Task { await vm.download(model.id) }
                 }
                 .buttonStyle(.bordered)
             }
@@ -65,6 +76,9 @@ struct ModelListView: View {
                 model: model,
                 onLoadSize: { modelId in
                     Task { await vm.loadSize(modelId) }
+                },
+                onDownload: { modelId in
+                    Task { await vm.download(modelId) }
                 }
             )
         }
@@ -76,6 +90,7 @@ struct ModelListView: View {
 struct ModelRowView: View {
     let model: Model
     let onLoadSize: (Repo.ID) -> Void
+    let onDownload: (Repo.ID) -> Void
     var body: some View {
         VStack(alignment: .leading) {
             Text(model.id.name)
@@ -90,6 +105,10 @@ struct ModelRowView: View {
                 } else {
                     Text("size: \(model.sizeString)")
                 }
+                Button("Download") {
+                    onDownload(model.id)
+                }
+                .buttonStyle(.bordered)
             }
             .font(.subheadline)
             .padding(.horizontal)
@@ -110,6 +129,7 @@ struct MesssageView: View {
                 }
             }
             Text(message)
+                .textSelection(.enabled)
         }
     }
 }
@@ -130,6 +150,7 @@ import HuggingFace
     var searchQuery: String = "mlx-community"
     private(set) var models: [Model] = []
     var message: String = ""
+    var downloadProgress: Double?
     
     let smallModel = "mlx-community/gemma-3-1b-it-4bit-DWQ"
     
@@ -153,6 +174,25 @@ import HuggingFace
             message = error.localizedDescription
             print(error)
         }
+    }
+    
+    func download(_ repoId: Repo.ID) async {
+        guard downloadProgress == nil else {
+            message = "Another download already in progress, skipping"
+            return
+        }
+        downloadProgress = 0.0
+        do {
+            let url = try await self.hubClient.downloadSnapshot(of: repoId) { progress in
+                self.downloadProgress = progress.fractionCompleted
+            }
+            message = "Downloaded to: \(url.path(percentEncoded: false))"
+            print(message)
+        } catch {
+            message = error.localizedDescription
+            print(error)
+        }
+        downloadProgress = nil
     }
     
     func inference() async {

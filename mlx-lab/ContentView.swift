@@ -26,6 +26,10 @@ struct ContentView: View {
             }
         }
         .padding()
+        .task {
+            print(URL.applicationSupportDirectory.path(percentEncoded: false))
+            print(URL.documentsDirectory.path(percentEncoded: false))
+        }
     }
 }
 
