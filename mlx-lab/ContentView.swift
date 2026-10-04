@@ -25,7 +25,6 @@ struct ContentView: View {
                 Text("Select a screen from the sidebar")
             }
         }
-        .padding()
         .task {
             print(URL.applicationSupportDirectory.path(percentEncoded: false))
             print(URL.documentsDirectory.path(percentEncoded: false))
