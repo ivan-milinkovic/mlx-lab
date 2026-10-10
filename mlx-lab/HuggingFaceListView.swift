@@ -19,6 +19,10 @@ struct HuggingFaceListView: View {
                     .progressViewStyle(.linear)
             }
             
+            downloadedModelList
+            
+            Divider()
+            
             ModelListView(vm: vm)
             
             Button("Test \(vm.smallModel) (needs auth)") {
@@ -30,8 +34,37 @@ struct HuggingFaceListView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .task {
-            await vm.search()
+            // await vm.search()
+            vm.updateDownloadedList()
         }
+    }
+    
+    var downloadedModelList: some View {
+        Section {
+            if vm.downloadedModels.isEmpty {
+                Text("None")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                List(vm.downloadedModels) { model in
+                    HStack {
+                        Text(model.name)
+                        #if os(macOS)
+                        Spacer()
+                        Button("", systemImage: "arrow.right.circle") {
+                            NSWorkspace.shared.open(model.url)
+                        }
+                        .buttonStyle(.plain)
+                        #endif // os(macOS)
+                    }
+                }
+                .frame(minHeight: 70)
+            }
+        } header: {
+            Text("Downloaded")
+                .font(.headline)
+               .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        // .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -149,19 +182,39 @@ import HuggingFace
     
     var searchQuery: String = "mlx-community"
     private(set) var models: [Model] = []
+    private(set) var downloadedModels: [DownloadedModel] = []
     var message: String = ""
     var downloadProgress: Double?
     
     let smallModel = "mlx-community/gemma-3-1b-it-4bit-DWQ"
     
+    struct DownloadedModel: Identifiable {
+        let name: String
+        let url: URL
+        var id: URL { url }
+    }
+    
     func search() async {
         do {
-           let response = try await self.hubClient.listModels(search: searchQuery, limit: 50)
-           models = response.items //.sorted(by: { ($0.downloads ?? 0) > ($1.downloads ?? 0) })
+            let response = try await self.hubClient.listModels(search: searchQuery, limit: 50)
+            models = response.items //.sorted(by: { ($0.downloads ?? 0) > ($1.downloads ?? 0) })
+            updateDownloadedList()
         } catch {
             message = error.localizedDescription
             print(error)
         }
+    }
+    
+    func updateDownloadedList() {
+        let cachesDirUrl = HubCache.default.cacheDirectory
+        let cachesDirPath = cachesDirUrl.path(percentEncoded: false)
+        let contents: [String] = (try? FileManager.default.contentsOfDirectory(atPath: cachesDirPath)) ?? []
+        let filtered = contents.filter { !$0.hasPrefix(".") }
+        downloadedModels = filtered.map {
+            let url = cachesDirUrl.appending(path: $0, directoryHint: .isDirectory)
+            return DownloadedModel(name: $0, url: url)
+        }
+        print("downloadedModels: \(downloadedModels)")
     }
     
     func loadSize(_ repoId: Repo.ID) async {

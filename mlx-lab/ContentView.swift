@@ -7,7 +7,7 @@ struct ContentView: View {
         var id: String { rawValue }
     }
     
-    @State private var route: Route? = nil
+    @State private var route: Route? = .hfList
 
     var body: some View {
         NavigationSplitView {
