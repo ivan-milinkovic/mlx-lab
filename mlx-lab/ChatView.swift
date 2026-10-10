@@ -38,13 +38,17 @@ struct ChatView: View {
                 }
             
             Text("Response")
-            Text(vm.response)
+            ScrollView {
+                Text(Common.makeMarkdown(vm.response))
+            }
+            .frame(maxWidth: 400, maxHeight: 400)
         }
         .overlay {
             if vm.isLoading {
                 ProgressView().progressViewStyle(.circular)
             }
         }
+        .disabled(vm.isLoading)
         .task {
             vm.setup()
         }

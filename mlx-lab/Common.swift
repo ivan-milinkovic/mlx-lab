@@ -33,4 +33,13 @@ enum Common {
             .replacingOccurrences(of: "models--", with: "", options: .anchored)
             .replacingOccurrences(of: "--", with: "/")
     }
+    
+    static func makeMarkdown(_ content: String) -> AttributedString {
+        let opts = AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)
+        if let astr = try? AttributedString(markdown: content, options: opts) {
+            return astr
+        } else {
+            return AttributedString(stringLiteral: content)
+        }
+    }
 }
