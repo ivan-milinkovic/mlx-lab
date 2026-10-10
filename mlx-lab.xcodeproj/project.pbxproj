@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C111181307ACA0D001D9C38 /* MLXHuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = 2C111180307ACA0D001D9C38 /* MLXHuggingFace */; };
+		2C111183307ACA0D001D9C38 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 2C111182307ACA0D001D9C38 /* MLXLLM */; };
+		2C111185307ACA0D001D9C38 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 2C111184307ACA0D001D9C38 /* MLXLMCommon */; };
+		2C11118A307AD1F3001D9C38 /* Tokenizers in Frameworks */ = {isa = PBXBuildFile; productRef = 2C111189307AD1F3001D9C38 /* Tokenizers */; };
 		2C36648F300BA90C0055FECD /* HuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = 2C36648E300BA90B0055FECD /* HuggingFace */; };
 /* End PBXBuildFile section */
 
@@ -27,7 +31,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C111183307ACA0D001D9C38 /* MLXLLM in Frameworks */,
 				2C36648F300BA90C0055FECD /* HuggingFace in Frameworks */,
+				2C111185307ACA0D001D9C38 /* MLXLMCommon in Frameworks */,
+				2C111181307ACA0D001D9C38 /* MLXHuggingFace in Frameworks */,
+				2C11118A307AD1F3001D9C38 /* Tokenizers in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +79,10 @@
 			name = "mlx-lab";
 			packageProductDependencies = (
 				2C36648E300BA90B0055FECD /* HuggingFace */,
+				2C111180307ACA0D001D9C38 /* MLXHuggingFace */,
+				2C111182307ACA0D001D9C38 /* MLXLLM */,
+				2C111184307ACA0D001D9C38 /* MLXLMCommon */,
+				2C111189307AD1F3001D9C38 /* Tokenizers */,
 			);
 			productName = "mlx-lab";
 			productReference = 2C366477300BA3C50055FECD /* mlx-lab.app */;
@@ -102,6 +114,8 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				2C36648D300BA90B0055FECD /* XCRemoteSwiftPackageReference "swift-huggingface" */,
+				2C11117F307ACA0D001D9C38 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */,
+				2C111188307AD1F3001D9C38 /* XCRemoteSwiftPackageReference "swift-transformers" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2C366478300BA3C50055FECD /* Products */;
@@ -384,6 +398,24 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2C11117F307ACA0D001D9C38 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ml-explore/mlx-swift-lm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.32.3;
+			};
+		};
+		2C111188307AD1F3001D9C38 /* XCRemoteSwiftPackageReference "swift-transformers" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/huggingface/swift-transformers.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.5;
+			};
+			traits = (
+			);
+		};
 		2C36648D300BA90B0055FECD /* XCRemoteSwiftPackageReference "swift-huggingface" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/huggingface/swift-huggingface.git";
@@ -397,6 +429,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2C111180307ACA0D001D9C38 /* MLXHuggingFace */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C11117F307ACA0D001D9C38 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXHuggingFace;
+		};
+		2C111182307ACA0D001D9C38 /* MLXLLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C11117F307ACA0D001D9C38 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXLLM;
+		};
+		2C111184307ACA0D001D9C38 /* MLXLMCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C11117F307ACA0D001D9C38 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXLMCommon;
+		};
+		2C111189307AD1F3001D9C38 /* Tokenizers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C111188307AD1F3001D9C38 /* XCRemoteSwiftPackageReference "swift-transformers" */;
+			productName = Tokenizers;
+		};
 		2C36648E300BA90B0055FECD /* HuggingFace */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2C36648D300BA90B0055FECD /* XCRemoteSwiftPackageReference "swift-huggingface" */;

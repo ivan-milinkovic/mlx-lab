@@ -182,17 +182,11 @@ import HuggingFace
     
     var searchQuery: String = "mlx-community"
     private(set) var models: [Model] = []
-    private(set) var downloadedModels: [DownloadedModel] = []
+    private(set) var downloadedModels: [CachedModel] = []
     var message: String = ""
     var downloadProgress: Double?
     
     let smallModel = "mlx-community/gemma-3-1b-it-4bit-DWQ"
-    
-    struct DownloadedModel: Identifiable {
-        let name: String
-        let url: URL
-        var id: URL { url }
-    }
     
     func search() async {
         do {
@@ -206,14 +200,7 @@ import HuggingFace
     }
     
     func updateDownloadedList() {
-        let cachesDirUrl = HubCache.default.cacheDirectory
-        let cachesDirPath = cachesDirUrl.path(percentEncoded: false)
-        let contents: [String] = (try? FileManager.default.contentsOfDirectory(atPath: cachesDirPath)) ?? []
-        let filtered = contents.filter { !$0.hasPrefix(".") }
-        downloadedModels = filtered.map {
-            let url = cachesDirUrl.appending(path: $0, directoryHint: .isDirectory)
-            return DownloadedModel(name: $0, url: url)
-        }
+        downloadedModels = Common.loadCachedModels()
         print("downloadedModels: \(downloadedModels)")
     }
     

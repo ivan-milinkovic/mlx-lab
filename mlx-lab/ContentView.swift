@@ -4,10 +4,11 @@ struct ContentView: View {
     
     enum Route: String, Identifiable, CaseIterable {
         case hfList = "HuggingFace List"
+        case chat = "Chat"
         var id: String { rawValue }
     }
     
-    @State private var route: Route? = .hfList
+    @State private var route: Route? = .chat
 
     var body: some View {
         NavigationSplitView {
@@ -21,6 +22,8 @@ struct ContentView: View {
             switch route {
             case .hfList:
                 HuggingFaceListView()
+            case .chat:
+                ChatView()
             case nil:
                 Text("Select a screen from the sidebar")
             }
