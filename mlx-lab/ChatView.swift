@@ -146,7 +146,7 @@ struct MessageView: View {
     
     var body: some View {
         Group {
-            Text(message.chatMessage.content)
+            Text(Common.makeMarkdown(message.chatMessage.content))
                 .textSelection(.enabled)
         }
         .padding(8)
