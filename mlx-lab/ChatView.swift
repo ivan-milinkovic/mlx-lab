@@ -98,15 +98,28 @@ final class ChatViewModel {
             await promptTask.value
         }
         promptTask = Task {
-            await prompt(promptStr)
+            // await simplePrompt(promptStr)
+            await streamingPrompt(promptStr)
         }
     }
     
-    func prompt(_ promptStr: String) async {
+    func simplePrompt(_ promptStr: String) async {
         isLoading = true; defer { isLoading = false }
         guard let chatSession else { return }
         do {
             self.response = try await chatSession.value.respond(to: promptStr)
+        } catch {
+            print("error responding:", error)
+        }
+    }
+    
+    func streamingPrompt(_ promptStr: String) async {
+        guard let chatSession else { return }
+        response = ""
+        do {
+            for try await chunk in chatSession.value.streamResponse(to: promptStr) {
+                response += chunk
+            }
         } catch {
             print("error responding:", error)
         }
