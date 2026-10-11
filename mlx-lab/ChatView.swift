@@ -28,6 +28,12 @@ struct ChatView: View {
             }
         }
         .disabled(vm.isLoading)
+        .onChange(of: vm.isLoading) { _, isLoading in
+            guard !isLoading, vm.chatSession != nil else { return }
+            Task { @MainActor in
+                isPromptFocused = true
+            }
+        }
         .task {
             vm.setup()
         }
@@ -85,7 +91,6 @@ struct ChatView: View {
         Task { @MainActor in
             await vm.sendPrompt(promptString)
             promptString = ""
-            isPromptFocused = true
         }
     }
     
