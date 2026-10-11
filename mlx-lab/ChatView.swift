@@ -46,7 +46,7 @@ struct ChatView: View {
                     .tag(nil as CachedModel?)
                 ForEach(vm.models) { model in
                     Text(model.name)
-                        .tag(model)
+                        .tag(model as CachedModel?)
                 }
             }
             .disabled(vm.modelContainer != nil)
