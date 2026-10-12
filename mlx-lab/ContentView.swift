@@ -3,9 +3,10 @@ import SwiftUI
 struct ContentView: View {
     
     enum Route: String, Identifiable, CaseIterable {
-        case hfList = "HuggingFace List"
+        case hfList = "Download"
         case chat = "Chat"
         case embedding = "NL"
+        case rag = "RAG"
         var id: String { rawValue }
     }
     
@@ -27,6 +28,8 @@ struct ContentView: View {
                 ChatView()
             case .embedding:
                 NLView()
+            case .rag:
+                RagView()
             case nil:
                 Text("Select a screen from the sidebar")
             }

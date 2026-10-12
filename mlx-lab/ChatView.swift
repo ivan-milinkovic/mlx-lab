@@ -68,6 +68,7 @@ struct ChatView: View {
                 }
             }
         }
+        Toggle("RAG", isOn: $vm.useRag)
     }
     
     @ViewBuilder var prompt: some View {

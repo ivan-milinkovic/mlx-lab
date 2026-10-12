@@ -12,6 +12,7 @@
 		2C111185307ACA0D001D9C38 /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 2C111184307ACA0D001D9C38 /* MLXLMCommon */; };
 		2C11118A307AD1F3001D9C38 /* Tokenizers in Frameworks */ = {isa = PBXBuildFile; productRef = 2C111189307AD1F3001D9C38 /* Tokenizers */; };
 		2C36648F300BA90C0055FECD /* HuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = 2C36648E300BA90B0055FECD /* HuggingFace */; };
+		2CF44ED8307D8E3600D10949 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 2CF44ED7307D8E3600D10949 /* Algorithms */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CF44ED8307D8E3600D10949 /* Algorithms in Frameworks */,
 				2C111183307ACA0D001D9C38 /* MLXLLM in Frameworks */,
 				2C36648F300BA90C0055FECD /* HuggingFace in Frameworks */,
 				2C111185307ACA0D001D9C38 /* MLXLMCommon in Frameworks */,
@@ -83,6 +85,7 @@
 				2C111182307ACA0D001D9C38 /* MLXLLM */,
 				2C111184307ACA0D001D9C38 /* MLXLMCommon */,
 				2C111189307AD1F3001D9C38 /* Tokenizers */,
+				2CF44ED7307D8E3600D10949 /* Algorithms */,
 			);
 			productName = "mlx-lab";
 			productReference = 2C366477300BA3C50055FECD /* mlx-lab.app */;
@@ -116,6 +119,7 @@
 				2C36648D300BA90B0055FECD /* XCRemoteSwiftPackageReference "swift-huggingface" */,
 				2C11117F307ACA0D001D9C38 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */,
 				2C111188307AD1F3001D9C38 /* XCRemoteSwiftPackageReference "swift-transformers" */,
+				2CF44ED6307D8E3600D10949 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2C366478300BA3C50055FECD /* Products */;
@@ -432,6 +436,14 @@
 			traits = (
 			);
 		};
+		2CF44ED6307D8E3600D10949 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -459,6 +471,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2C36648D300BA90B0055FECD /* XCRemoteSwiftPackageReference "swift-huggingface" */;
 			productName = HuggingFace;
+		};
+		2CF44ED7307D8E3600D10949 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2CF44ED6307D8E3600D10949 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

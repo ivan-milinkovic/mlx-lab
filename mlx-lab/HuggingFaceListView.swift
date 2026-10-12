@@ -62,7 +62,8 @@ struct HuggingFaceListView: View {
         } header: {
             Text("Downloaded")
                 .font(.headline)
-               .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         // .frame(maxWidth: .infinity, alignment: .leading)
     }
