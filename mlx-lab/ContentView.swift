@@ -5,6 +5,7 @@ struct ContentView: View {
     enum Route: String, Identifiable, CaseIterable {
         case hfList = "HuggingFace List"
         case chat = "Chat"
+        case embedding = "NL"
         var id: String { rawValue }
     }
     
@@ -24,6 +25,8 @@ struct ContentView: View {
                 HuggingFaceListView()
             case .chat:
                 ChatView()
+            case .embedding:
+                NLView()
             case nil:
                 Text("Select a screen from the sidebar")
             }
