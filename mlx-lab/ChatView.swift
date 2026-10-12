@@ -170,6 +170,7 @@ import Observation
 import HuggingFace
 import MLXHuggingFace
 import Tokenizers
+import MLX
 
 @Observable @MainActor
 final class ChatViewModel {
@@ -268,6 +269,37 @@ final class ChatViewModel {
         } catch {
             let errorMessage = Message(chatMessage: Chat.Message(role: .assistant, content: error.localizedDescription))
             messages.append(errorMessage)
+        }
+    }
+    
+    func embed(_ text: String) async -> [Float] {
+        guard let container = modelContainer else {
+            return []
+        }
+        
+        return await container.perform { (context: ModelContext) in
+            let tokenizer = context.tokenizer
+            
+            // 1. Tokenize text
+            let tokens = tokenizer.encode(text: text)
+            let inputIds = MLXArray(tokens).expandedDimensions(axes: [0]) // [1, sequenceLength]
+            
+            // 2. Forward pass through your loaded LLM (all transformer layers)
+            // output has shape [1, sequenceLength, vocabSize]
+            let output = context.model(inputIds, cache: nil)
+            
+            // 3. Pool the sequence:
+            // For causal LLMs, the last token vector captures the entire prompt context:
+            let pooled = output[0, -1]
+            
+            // (Alternatively, for mean pooling across all tokens: MLX.mean(output[0], axis: 0))
+            
+            // 4. L2-normalize so cosine similarity is just the dot product
+            let normalized = pooled / (MLX.norm(pooled) + 1e-9)
+            
+            // 5. Evaluate on GPU and return as [Float]
+            normalized.eval()
+            return normalized.asArray(Float.self)
         }
     }
 }
