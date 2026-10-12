@@ -68,10 +68,10 @@ struct ChatView: View {
                 }
             }
         }
-        Toggle("RAG", isOn: $vm.useRag)
     }
     
     @ViewBuilder var prompt: some View {
+        @Bindable var vm = vm
         HStack {
             TextField("Prompt", text: $promptString)
                 .focused($isPromptFocused)
@@ -85,6 +85,7 @@ struct ChatView: View {
                 sendPrompt()
             }
             .buttonStyle(.plain)
+            Toggle("RAG", isOn: $vm.useRag)
         }
     }
     
