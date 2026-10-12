@@ -230,6 +230,7 @@ final class ChatViewModel {
             // await streamingPrompt(promptStr)
             await streamingMessagePrompt(promptStr)
         }
+        await promptTask?.value
     }
     
     func simplePrompt(_ promptStr: String) async {
