@@ -17,7 +17,6 @@ struct ChatView: View {
     var body: some View {
         VStack {
             model
-            // singleResponse
             messages
             prompt
         }
@@ -95,14 +94,6 @@ struct ChatView: View {
         }
     }
     
-    @ViewBuilder var singleResponse: some View {
-        Text("Response")
-        ScrollView {
-            Text(Common.makeMarkdown(vm.response))
-        }
-        .frame(maxWidth: 400, maxHeight: 400)
-    }
-    
     @ViewBuilder var messages: some View {
         ScrollViewReader { scrollProxy in
             MessageListView(messages: vm.messages)
@@ -114,8 +105,6 @@ struct ChatView: View {
         }
         .frame(maxWidth: 800, maxHeight: 800)
     }
-    
-    fileprivate func getVM() -> AppModel { vm }
 }
 
 #Preview("ChatView") {

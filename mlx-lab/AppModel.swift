@@ -20,7 +20,6 @@ final class AppModel {
     
     var models: [CachedModel] = []
     var model: CachedModel?
-    var response: String = ""
     var messages: [Message] = []
     var isLoading = false
     
@@ -61,7 +60,6 @@ final class AppModel {
         chatSession = nil
         modelContainer = nil
         messages = []
-        response = ""
     }
     
     func sendPrompt(_ promptStr: String) async {
@@ -69,8 +67,6 @@ final class AppModel {
             await promptTask.value
         }
         promptTask = Task {
-            // await simplePrompt(promptStr)
-            // await streamingPrompt(promptStr)
             await streamingMessagePrompt(promptStr)
         }
         await promptTask?.value
@@ -80,19 +76,8 @@ final class AppModel {
         isLoading = true; defer { isLoading = false }
         guard let chatSession else { return }
         do {
-            self.response = try await chatSession.value.respond(to: promptStr)
-        } catch {
-            print("error responding:", error)
-        }
-    }
-    
-    func streamingPrompt(_ promptStr: String) async {
-        guard let chatSession else { return }
-        response = ""
-        do {
-            for try await chunk in chatSession.value.streamResponse(to: promptStr) {
-                response += chunk
-            }
+            let response = try await chatSession.value.respond(to: promptStr)
+            print(response)
         } catch {
             print("error responding:", error)
         }
