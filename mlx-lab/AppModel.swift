@@ -103,7 +103,7 @@ final class AppModel {
         messages.append(responseMessage)
         let idx = messages.endIndex.advanced(by: -1)
         do {
-            for try await chunk in chatSession.value.streamResponse(to: promptStr) {
+            for try await chunk in chatSession.value.streamResponse(to: userMessage.chatMessage.content) {
                 messages[idx].chatMessage.content += chunk
             }
         } catch {
